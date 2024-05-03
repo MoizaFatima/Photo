@@ -5,6 +5,7 @@ import Downloader from './Downloader';
 import ShareComponent from './ShareComponent';
 import EditComponent from './EditComponent';
 import FavoriteComponent from './FavoriteComponent';
+import AppWp from './AppWp';
 
 const ImageDetailScreen = ({ route, navigation }) => {
   const { image, uri } = route.params;
@@ -29,7 +30,8 @@ const ImageDetailScreen = ({ route, navigation }) => {
   };
 
   const handleWallpaper = () => {
-    // Implement setting wallpaper functionality
+    
+    return <AppWp URL="https://plus.unsplash.com/premium_photo-1675629118284-c9eb039df8cd?q=80&w=1376&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"/>;
   };
 
   const handleFavorites = () => {
@@ -42,8 +44,9 @@ const ImageDetailScreen = ({ route, navigation }) => {
   };
 
   const bottomNavigationRoutes = [
-    { key: 'wallpaper', title: 'Wallpaper', focusedIcon: 'wallpaper' },
+    
     { key: 'download', title: 'Download', focusedIcon: 'download' },
+    { key: 'wallpaper', title: 'Wallpaper', focusedIcon: 'wallpaper' },
     { key: 'edit', title: 'Edit', focusedIcon: 'pencil' },
     { key: 'favorites', title: 'Favorites', focusedIcon: 'heart' },
     { key: 'share', title: 'Share', focusedIcon: 'share' },
