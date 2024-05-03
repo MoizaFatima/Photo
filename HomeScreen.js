@@ -7,6 +7,7 @@ import ImageDetailScreen from './ImageDetailScreen';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ShareComponent from './ShareComponent';
 import Downloader from './Downloader';
+import DropdownComponent from './DropdownComponent';
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [expanded, setExpanded] = useState(false);
@@ -147,22 +148,7 @@ const HomeScreen = () => {
         <Appbar.Action icon="earth" onPress={handleLanguage} />
       </Appbar.Header>
 
-      <List.Section>
-        <List.Accordion
-          title={selectedCategory ? selectedCategory.name : 'All'}
-          
-          expanded={expanded}
-          onPress={() => setExpanded(!expanded)}
-        >
-          {categories.map((category) => (
-            <List.Item
-            key={category.id}
-            title={<Text>{category.name}</Text>} // Wrap the text string within a <Text> component
-            onPress={() => handleCategorySelect(category)}
-          />
-          ))}
-        </List.Accordion>
-      </List.Section>
+      <DropdownComponent/>
 
       <View style={{ flex: 6 }}>
   
@@ -186,7 +172,6 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   gridContainer: {
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
   },
   image: {
     width: 100,
