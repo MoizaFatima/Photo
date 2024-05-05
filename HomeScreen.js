@@ -4,14 +4,65 @@ import { Appbar, Menu, Button, Card, Title, useTheme, BottomNavigation, List, Ic
 
 import { useNavigation } from '@react-navigation/native';
 import ImageDetailScreen from './ImageDetailScreen';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import ShareComponent from './ShareComponent';
-import Downloader from './Downloader';
+
 import DropdownComponent from './DropdownComponent';
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [expanded, setExpanded] = useState(false);
+  const [languages, setLanguages] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [images, setImages] = useState([]);
+
+
+  useEffect(() => {
+    fetchLanguages();
+  }, []);
+
+  const fetchLanguages = async () => {
+    try {
+      const response = await fetch('https://photobyte-ai.online/admin-manager/api/languages');
+      const data = await response.json();
+      setLanguages(data);
+    } catch (error) {
+      console.error('Error fetching languages:', error);
+    }
+  };
+
+  const fetchCategories = async (languageId) => {
+    try {
+      const response = await fetch(`https://photobyte-ai.online/admin-manager/api/categories/${languageId}`);
+      const data = await response.json();
+      setCategories(data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const fetchImages = async (categoryId) => {
+    try {
+      const response = await fetch(`https://photobyte-ai.online/admin-manager/api/images/${categoryId}`);
+      const data = await response.json();
+      setImages(data);
+    } catch (error) {
+      console.error('Error fetching images:', error);
+    }
+  };
+
+  const handleLanguageChange = async (languageId) => {
+    setSelectedLanguage(languageId);
+    setSelectedCategory(null);
+    setImages([]);
+    await fetchCategories(languageId);
+  };
+
+  const handleCategoryChange = async (categoryId) => {
+    setSelectedCategory(categoryId);
+    await fetchImages(categoryId);
+  };
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -56,12 +107,7 @@ const HomeScreen = () => {
   const closeMenu = () => setVisible(false);
 
   // Sample categories data
-  const categories = [
-    { id: '1', name: 'All' },
-    { id: '2', name: 'Birds' },
-    { id: '3', name: 'Architecture' },
-    // Add more categories as needed
-  ];
+
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -127,7 +173,6 @@ const HomeScreen = () => {
     aiImages: handleAiImage,
   });
 
-  const handlePress = () => setExpanded(!expanded);
 
   return (
     <View style={{ flex: 1 }}>
@@ -145,10 +190,30 @@ const HomeScreen = () => {
         </Menu>
 
         <Appbar.Content title="App Logo" />
-        <Appbar.Action icon="earth" onPress={handleLanguage} />
+        {selectedLanguage && (
+        <>
+          <Appbar.Content
+            title={`(${selectedLanguage.code_2_digits})`}
+            style={{ alignItems: 'center'}}
+          />
+          
+        </>
+      )}
+      <Appbar.Action icon="earth" onPress={handleLanguage} />
+    
       </Appbar.Header>
 
-      <DropdownComponent/>
+      <DropdownComponent
+        data={languages}
+        placeholder="Select language"
+        onSelect={handleLanguageChange}
+      />
+
+      <DropdownComponent
+        data={categories}
+        placeholder="Select category"
+        onSelect={handleCategoryChange}
+      />
 
       <View style={{ flex: 6 }}>
   
@@ -177,7 +242,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 200,
     marginVertical: 10,
-    marginHorizontal:5,
+    marginHorizontal:10,
   },
   categoryImage: {
     width: 24,

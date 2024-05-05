@@ -3,18 +3,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Dropdown } from 'react-native-searchable-dropdown-kj';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-const data = [
-  { label: 'Animals', value: '1' },
-  { label: 'Birds', value: '2' },
-  { label: 'Landscape', value: '3' },
-  { label: 'Architecture', value: '4' },
-  { label: 'Cars', value: '5' },
-  { label: 'Item 6', value: '6' },
-  { label: 'Item 7', value: '7' },
-  { label: 'Item 8', value: '8' },
-];
 
-const DropdownComponent = () => {
+const DropdownComponent = ({ data, placeholder, onSelect }) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -22,7 +12,7 @@ const DropdownComponent = () => {
     if (value || isFocus) {
       return (
         <Text style={[styles.label, isFocus && { color: 'blue' }]}>
-          Categories
+          {placeholder}
         </Text>
       );
     }
@@ -41,16 +31,17 @@ const DropdownComponent = () => {
         data={data}
         search
         maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={!isFocus ? 'Select item' : '...'}
+        labelField="name" // Assuming 'name' field contains the label text
+        valueField="id"   // Assuming 'id' field contains the value
+        placeholder={!isFocus ? placeholder : '...'}
         searchPlaceholder="Search..."
         value={value}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
-        onChange={item => {
-          setValue(item.value);
+        onChange={(item) => {
+          setValue(item.id);
           setIsFocus(false);
+          onSelect(item); // Pass the selected item to the onSelect handler
         }}
         renderLeftIcon={() => (
           <AntDesign
@@ -64,7 +55,6 @@ const DropdownComponent = () => {
     </View>
   );
 };
-
 export default DropdownComponent;
 
 const styles = StyleSheet.create({

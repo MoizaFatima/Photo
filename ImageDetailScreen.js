@@ -28,7 +28,7 @@ const ImageDetailScreen = ({ route, navigation }) => {
   const handleShare = () => {
     return <ShareComponent message="Check out this link!" url="https://unsplash.com/photos/a-white-couch-sitting-in-a-room-next-to-a-window-txGgKTf9Aio" />;
   };
-
+const handleEmpty=()=>{};
   const handleWallpaper = () => {
     
     return <AppWp URL="https://plus.unsplash.com/premium_photo-1675629118284-c9eb039df8cd?q=80&w=1376&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"/>;
@@ -44,10 +44,11 @@ const ImageDetailScreen = ({ route, navigation }) => {
   };
 
   const bottomNavigationRoutes = [
-    
+    { key: 'empty', title: '', focusedIcon: 'minus' },
     { key: 'download', title: 'Download', focusedIcon: 'download' },
-    { key: 'wallpaper', title: 'Wallpaper', focusedIcon: 'wallpaper' },
     { key: 'edit', title: 'Edit', focusedIcon: 'pencil' },
+    { key: 'wallpaper', title: 'Wallpaper', focusedIcon: 'wallpaper' },
+    
     { key: 'favorites', title: 'Favorites', focusedIcon: 'heart' },
     { key: 'share', title: 'Share', focusedIcon: 'share' },
   ];
@@ -64,6 +65,8 @@ const ImageDetailScreen = ({ route, navigation }) => {
         return handleShare();
       case 'wallpaper':
         return handleWallpaper();
+        case'empty':
+        return handleEmpty();
       default:
         return null;
     }
@@ -108,6 +111,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+    
   },
 });
 
